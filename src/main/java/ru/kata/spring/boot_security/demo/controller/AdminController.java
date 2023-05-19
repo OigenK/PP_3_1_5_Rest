@@ -31,25 +31,19 @@ public class AdminController {
         return "admin";
     }
 
-    @PostMapping("/saveUser") //сохранение
+    @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
         return "redirect:/admin";
     }
-    @PostMapping(value = "/admin/{id}")//редактирование
+
+    @PostMapping(value = "/admin/{id}")
     public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-        User userUpdate = userService.findById(id);
-        userUpdate.setUsername(user.getUsername());
-        userUpdate.setPassword(user.getPassword());
-        userUpdate.setFirstName(user.getFirstName());
-        userUpdate.setLastName(user.getLastName());
-        userUpdate.setAge(user.getAge());
-        userUpdate.setRoles(user.getRoles());
-        userService.updateUser(id,userUpdate);
+        userService.updateUser(id, user);
         return "redirect:/admin";
     }
 
-    @PostMapping("/admin/{id}/delete") //удаление
+    @PostMapping("/admin/{id}/delete")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";

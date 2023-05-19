@@ -25,9 +25,9 @@ public class Start {
         Role roleUser = new Role("ROLE_USER");
         roleService.addRole(roleAdmin);
         roleService.addRole(roleUser);
-        User user = new User("Ivan","admin","Pole","admin",32, Set.of(roleAdmin));
-        User user1 = new User("Victor","user","Don","user",19,Set.of(roleUser));
-        User user2 = new User("Polina","polina","Moroz","polina",26,Set.of(roleUser));
+        User user = new User("Ivan", "admin", "Pole", "admin", 32, Set.of(roleAdmin));
+        User user1 = new User("Victor", "user", "Don", "user", 19, Set.of(roleUser));
+        User user2 = new User("Polina", "polina", "Moroz", "polina", 26, Set.of(roleUser));
         userService.saveUser(user);
         userService.saveUser(user1);
         userService.saveUser(user2);

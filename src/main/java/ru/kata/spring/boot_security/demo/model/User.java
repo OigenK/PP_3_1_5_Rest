@@ -17,7 +17,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private  String firstName;
+    private String firstName;
 
     private String username;
 
@@ -35,7 +35,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles = new HashSet<>();
 
-    public User (){
+    public User() {
     }
 
     public User(String firstName, String username, String lastName, String password, Integer age, Collection<Role> roles) {

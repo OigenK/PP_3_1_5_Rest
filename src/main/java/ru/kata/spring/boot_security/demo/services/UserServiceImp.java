@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImp(UserRepository userRepository,@Lazy PasswordEncoder passwordEncoder) {
+    public UserServiceImp(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -57,7 +57,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
             userUp.setLastName(user.getLastName());
             userUp.setAge(user.getAge());
             userUp.setRoles(user.getRoles());
-            userUp.setPassword(user.getPassword());
+            userUp.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(userUp);
         } else {
             throw new UsernameNotFoundException("User is not found");
@@ -70,7 +70,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
 
-
     @Override
     public User findById(long id) {
         return userRepository.getById(id);
@@ -80,6 +79,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthority(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
     }
@@ -87,9 +87,9 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         User user = findByUserName(name);
-                if(user == null) {
-                    throw new UsernameNotFoundException("User is not found");
-                }
+        if (user == null) {
+            throw new UsernameNotFoundException("User is not found");
+        }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 mapRolesToAuthority(user.getRoles()));
     }
