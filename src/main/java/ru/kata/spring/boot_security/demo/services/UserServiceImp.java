@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.services;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import ru.kata.spring.boot_security.dto.UserDto;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +31,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User findByUserName(String name) {
+    public Optional <User> findByUserName(String name) {
         return userRepository.findByUsername(name);
     }
 
@@ -65,7 +67,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -81,16 +83,22 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthority(Collection<Role> roles) {
-        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
+        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = findByUserName(name);
-        if (user == null) {
+        Optional<User> user = findByUserName(name);
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException("User is not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                mapRolesToAuthority(user.getRoles()));
+        return user.get();
+    }
+
+    @Override
+    @Transactional
+    public User convertToUser(UserDto userDto) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(userDto, User.class);
     }
 }

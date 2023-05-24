@@ -2,8 +2,10 @@ package ru.kata.spring.boot_security.demo.services;
 
 
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.dto.UserDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -13,10 +15,13 @@ public interface UserService {
 
     void updateUser(long id, User user);
 
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
     User findById(long id);
 
+    User convertToUser(UserDto userDto);
+
     List<User> getAllUsers();
+
 
 }

@@ -21,8 +21,8 @@ public class Start {
 
     @PostConstruct
     private void startUsers() {
-        Role roleAdmin = new Role("ROLE_ADMIN");
-        Role roleUser = new Role("ROLE_USER");
+        Role roleAdmin = new Role("ADMIN");
+        Role roleUser = new Role("USER");
         roleService.addRole(roleAdmin);
         roleService.addRole(roleUser);
         User user = new User("Ivan", "admin", "Pole", "admin", 32, Set.of(roleAdmin));

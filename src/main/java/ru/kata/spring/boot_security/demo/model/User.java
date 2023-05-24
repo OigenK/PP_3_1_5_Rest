@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 
 @Entity
 @Table(name = "users")
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class User implements UserDetails {
 
     @Id

@@ -17,13 +17,19 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Role> getAllRoles() {
         return repository.findAll();
     }
 
     @Override
+    @Transactional
     public void addRole(Role role) {
         repository.save(role);
+    }
+
+    @Override
+    @Transactional
+    public void deleteRoleById(Long id) {
+        repository.deleteById(id);
     }
 }
