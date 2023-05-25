@@ -10,10 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
 
     @Id
@@ -31,16 +32,13 @@ public class User implements UserDetails {
 
     @ManyToMany
     @Fetch(FetchMode.JOIN)
-    @JoinTable(
-            name = "users_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles = new HashSet<>();
+    @JoinTable(name = "users_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String firstName, String username, String lastName, String password, Integer age, Collection<Role> roles) {
+    public User(String firstName, String username, String lastName, String password, Integer age, Set<Role> roles) {
         this.firstName = firstName;
         this.username = username;
         this.lastName = lastName;
@@ -93,7 +91,7 @@ public class User implements UserDetails {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

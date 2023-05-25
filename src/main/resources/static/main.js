@@ -146,8 +146,10 @@ async function addNewUser(event) {
     let listOfRole = [];
     for (let i = 0; i < form_new.roleSelect.options.length; i++) {
         if (form_new.roleSelect.options[i].selected) {
-            listOfRole.push({id: form_new.roleSelect.options[i].value,
-                role: form_new.roleSelect.options[i].text});
+            listOfRole.push({
+                id: form_new.roleSelect.options[i].value,
+                role: form_new.roleSelect.options[i].text
+            });
         }
     }
     let method = {
@@ -207,8 +209,10 @@ async function editUser() {
     let listOfRole = [];
     for (let i = 0; i < form_ed.rolesForEditing.options.length; i++) {
         if (form_ed.rolesForEditing.options[i].selected) {
-            listOfRole.push({id: form_ed.rolesForEditing.options[i].value,
-                name: form_ed.rolesForEditing.options[i].text});
+            listOfRole.push({
+                id: form_ed.rolesForEditing.options[i].value,
+                name: form_ed.rolesForEditing.options[i].text
+            });
         }
     }
     let method = {

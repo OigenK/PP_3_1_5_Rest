@@ -31,7 +31,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional <User> findByUserName(String name) {
+    public Optional<User> findByUserName(String name) {
         return userRepository.findByUsername(name);
     }
 
@@ -52,19 +52,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Transactional
     public void updateUser(long id, User user) {
         Optional<User> updateUser = userRepository.findById(id);
-        if (updateUser.isPresent()) {
-            User userUp = updateUser.get();
-            userUp.setId(id);
-            userUp.setUsername(user.getUsername());
-            userUp.setLastName(user.getLastName());
-            userUp.setAge(user.getAge());
-            userUp.setRoles(user.getRoles());
-            userUp.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(userUp);
-        } else {
-            throw new UsernameNotFoundException("User is not found");
+        String newPassword = user.getPassword();
+        String currentPassword = updateUser.get().getPassword();
+        if (!currentPassword.equals(newPassword)) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+
+        userRepository.save(user);
     }
+
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -96,7 +92,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    @Transactional
     public User convertToUser(UserDto userDto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(userDto, User.class);
